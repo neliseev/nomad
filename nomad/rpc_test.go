@@ -540,6 +540,11 @@ func TestRPC_handleMultiplexV2(t *testing.T) {
 
 	// Make two streams
 	conf := yamux.DefaultConfig()
+	conf.AcceptBacklog = 512
+	conf.KeepAliveInterval = 300 * time.Second
+	conf.ConnectionWriteTimeout = 30 * time.Second
+	conf.StreamCloseTimeout = 10 * time.Minute
+	conf.StreamOpenTimeout = 2 * time.Minute
 	conf.LogOutput = nil
 	conf.Logger = testlog.Logger(t)
 	session, err := yamux.Client(p1, conf)

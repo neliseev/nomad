@@ -390,6 +390,11 @@ func (p *ConnPool) getNewConn(region string, addr net.Addr) (*Conn, error) {
 
 	// Setup the logger
 	conf := yamux.DefaultConfig()
+	conf.AcceptBacklog = 512
+	conf.KeepAliveInterval = 300 * time.Second
+	conf.ConnectionWriteTimeout = 30 * time.Second
+	conf.StreamCloseTimeout = 10 * time.Minute
+	conf.StreamOpenTimeout = 2 * time.Minute
 	conf.LogOutput = nil
 	conf.Logger = p.logger
 

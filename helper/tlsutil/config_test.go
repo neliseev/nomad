@@ -454,6 +454,11 @@ func startTLSServer(config *Config) (net.Conn, chan error) {
 
 	// Use yamux to buffer the reads, otherwise it's easy to deadlock
 	muxConf := yamux.DefaultConfig()
+	muxConf.AcceptBacklog = 512
+	muxConf.KeepAliveInterval = 300 * time.Second
+	muxConf.ConnectionWriteTimeout = 30 * time.Second
+	muxConf.StreamCloseTimeout = 10 * time.Minute
+	muxConf.StreamOpenTimeout = 2 * time.Minute
 	serverSession, _ := yamux.Server(server, muxConf)
 	clientSession, _ := yamux.Client(client, muxConf)
 	clientConn, _ := clientSession.Open()

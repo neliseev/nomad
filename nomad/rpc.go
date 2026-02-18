@@ -407,6 +407,11 @@ func (r *rpcHandler) handleMultiplex(ctx context.Context, conn net.Conn, rpcCtx 
 	}()
 
 	conf := yamux.DefaultConfig()
+	conf.AcceptBacklog = 512
+	conf.KeepAliveInterval = 300 * time.Second
+	conf.ConnectionWriteTimeout = 30 * time.Second
+	conf.StreamCloseTimeout = 10 * time.Minute
+	conf.StreamOpenTimeout = 2 * time.Minute
 	conf.LogOutput = nil
 	conf.Logger = r.gologger
 	server, err := yamux.Server(conn, conf)
@@ -516,6 +521,11 @@ func (r *rpcHandler) handleMultiplexV2(ctx context.Context, conn net.Conn, rpcCt
 	}()
 
 	conf := yamux.DefaultConfig()
+	conf.AcceptBacklog = 512
+	conf.KeepAliveInterval = 300 * time.Second
+	conf.ConnectionWriteTimeout = 30 * time.Second
+	conf.StreamCloseTimeout = 10 * time.Minute
+	conf.StreamOpenTimeout = 2 * time.Minute
 	conf.LogOutput = nil
 	conf.Logger = r.gologger
 	server, err := yamux.Server(conn, conf)
